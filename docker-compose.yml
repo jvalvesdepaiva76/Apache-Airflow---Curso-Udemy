@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5433:5433"
+
+  webserver:
+    image: apache/airflow:latest
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW_DATABASE_NAME: airflow
+      AIRFLOW_DATABASE_USERNAME: airflow
+      AIRFLOW_DATABASE_PASSWORD: airflow
+      AIRFLOW_EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+    ports:
+      - "8080:8080"
